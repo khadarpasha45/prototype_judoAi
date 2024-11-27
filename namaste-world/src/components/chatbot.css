@@ -62,9 +62,9 @@
 
 /* Clear button when the sidebar is open */
 .clear-chat-btn.open {
-    top: 55px; /* 5px below the toggle button */
-    left: auto;
-    right: 10px;
+    top: 70px; /* 5px below the toggle button */
+    right: auto;
+    left: 151px;
 }
 
 /* Clear button when the sidebar is closed */
