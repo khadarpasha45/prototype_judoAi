@@ -10,15 +10,18 @@ function ChatInterface() {
     const handleSend = () => {
         if (input.trim() !== "") {
             const userMessage = { sender: "user", text: input };
-            setMessages([...messages, userMessage]);
-
             const botResponse = {
                 sender: "bot",
                 text: "This is a placeholder response.",
             };
+
+            // Update messages with both userMessage and botResponse
             setMessages((prevMessages) => [...prevMessages, userMessage, botResponse]);
 
-            setHistory([...history, input]);
+            // Add the input to the history
+            setHistory((prevHistory) => [...prevHistory, input]);
+
+            // Clear the input
             setInput("");
         }
     };
@@ -27,27 +30,45 @@ function ChatInterface() {
         setIsSidebarOpen(!isSidebarOpen);
     };
 
+    const clearChats = () => {
+        setMessages([]);  // Clear the messages
+        setHistory([]);   // Clear the history
+    };
+
     return (
         <div className="chat-container">
-            <button className="toggle-sidebar-btn" onClick={toggleSidebar}>
+            <aside className={`sidebar ${isSidebarOpen ? "open" : "closed"}`}>
+                {isSidebarOpen && (
+                    <>
+                        <h2>History</h2>
+                        <ul>
+                            {history.map((item, index) => (
+                                <li key={index}>{item}</li>
+                            ))}
+                        </ul>
+                    </>
+                )}
+            </aside>
+            <button
+                className={`toggle-sidebar-btn ${isSidebarOpen ? "open" : "closed"}`}
+                onClick={toggleSidebar}
+            >
                 ☰
             </button>
-            {isSidebarOpen && (
-                <aside className="sidebar">
-                    <h2>History</h2>
-                    <ul>
-                        {history.map((item, index) => (
-                            <li key={index}>{item}</li>
-                        ))}
-                    </ul>
-                </aside>
-            )}
-            <div className={`chat-content ${isSidebarOpen ? "with-sidebar" : ""}`}>
+            {/* New Chat Button - Replacing the Trash Icon */}
+            <button
+                className={`clear-chat-btn ${isSidebarOpen ? "open" : "closed"}`}
+                onClick={clearChats}
+            >
+                💬 {/* New Chat Icon */}
+            </button>
+            <div className="chat-content">
                 <div className="chat-messages">
                     {messages.map((msg, index) => (
                         <div
                             key={index}
-                            className={`chat-message ${msg.sender === "user" ? "user" : "bot"}`}
+                            className={`chat-message ${msg.sender}`}
+                            style={{ maxWidth: "70%", wordWrap: "break-word" }}
                         >
                             {msg.text}
                         </div>
